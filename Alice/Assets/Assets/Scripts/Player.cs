@@ -15,6 +15,7 @@ public class Player : MonoBehaviour {
     public Vector3 camera;
     public float cameraSpeed = 20f;
     Vector3 forward, right;
+    public Vector3 playerTrans;
 
 	// Use this for initialization
 	private void Start ()
@@ -32,12 +33,9 @@ public class Player : MonoBehaviour {
 	void Update ()
     {
         MoveVector = PoolInput();
+        playerTrans = thisRigidbody.transform.position;
         Move();
-		
-        camera = new Vector3(mainCamera.transform.position.x + (joystick.Horizontal() * cameraSpeed * Time.deltaTime), mainCamera.transform.position.y + (joystick.Vertical() * cameraSpeed * Time.deltaTime), mainCamera.transform.position.z - (joystick.Horizontal() * cameraSpeed * Time.deltaTime));
-
-        mainCamera.transform.position = camera;
-
+        CameraMove();
     }
 
      void Move()
@@ -51,6 +49,17 @@ public class Player : MonoBehaviour {
         transform.forward = heading;
         transform.position += rightMovement;
         transform.position += upMovement;
+    }
+
+    void CameraMove()
+    {
+        if(thisRigidbody.transform.position != playerTrans)
+        {
+            camera = new Vector3(mainCamera.transform.position.x + (joystick.Horizontal() * cameraSpeed * Time.deltaTime),
+    mainCamera.transform.position.y + (joystick.Vertical() * cameraSpeed * Time.deltaTime), mainCamera.transform.position.z - (joystick.Horizontal() * cameraSpeed * Time.deltaTime));
+            mainCamera.transform.position = camera;
+        }
+
     }
 
      Vector3 PoolInput()
